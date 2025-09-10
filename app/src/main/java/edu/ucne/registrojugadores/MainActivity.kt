@@ -36,17 +36,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.room.Dao
-import androidx.room.Database
-import androidx.room.Delete
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.Query
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.Upsert
+import edu.ucne.registrojugadores.data.local.database.JugadorDb
+import edu.ucne.registrojugadores.data.local.entities.JugadorEntity
 import edu.ucne.registrojugadores.ui.theme.RegistroJugadoresTheme
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -65,6 +58,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             RegistroJugadoresTheme {
+
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(
                         modifier = Modifier
@@ -109,46 +104,6 @@ class MainActivity : ComponentActivity() {
             Text(modifier = Modifier.weight(2f), text = it.partidas.toString())
         }
         HorizontalDivider()
-    }
-
-    @Entity(tableName = "Jugadores")
-    data class JugadorEntity(
-        @PrimaryKey
-        val jugadorId: Int? = null,
-        val nombre: String = "",
-        val partidas: Int = 0
-    )
-
-    @Dao
-    interface JugadorDao {
-        @Upsert()
-        suspend fun save(jugador: JugadorEntity)
-        @Query(
-            """
-        SELECT * 
-        FROM Jugadores 
-        WHERE jugadorId=:id  
-        LIMIT 1
-        """
-        )
-        suspend fun find(id: Int): JugadorEntity?
-
-        @Delete
-        suspend fun delete(jugador: JugadorEntity)
-
-        @Query("SELECT * FROM Jugadores")
-        fun getAll(): Flow<List<JugadorEntity>>
-    }
-
-    @Database(
-        entities = [
-            JugadorEntity::class
-        ],
-        version = 1,
-        exportSchema = false
-    )
-    abstract class JugadorDb : RoomDatabase() {
-        abstract fun jugadorDao(): JugadorDao
     }
 
     @Composable
