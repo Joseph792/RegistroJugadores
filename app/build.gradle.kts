@@ -1,7 +1,10 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -40,6 +43,29 @@ android {
 }
 
 dependencies {
+
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.0")
+
+    //navegacion
+    implementation("androidx.navigation:navigation-compose:2.9.0")
+    implementation(libs.kotlin.serialization.json)
+
+    //room
+    implementation("androidx.room:room-runtime:2.7.1")
+    annotationProcessor("androidx.room:room-compiler:2.7.1")
+    ksp("androidx.room:room-compiler:2.7.1")
+    implementation("androidx.room:room-ktx:2.7.1")
+
+    //hilt
+    implementation("com.google.dagger:hilt-android:2.56.2")
+    ksp("com.google.dagger:hilt-compiler:2.51")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    //retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.2")
+    implementation("com.squareup.retrofit2:converter-moshi:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
